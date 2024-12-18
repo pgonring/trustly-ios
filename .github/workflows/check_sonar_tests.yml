@@ -30,10 +30,6 @@ jobs:
             gem install cocoapods
             pod install --project-directory=Example
 
-      - name: Generate sonar-project.properties
-        run: |
-          echo "sonar.login=${{ env.SONAR_TOKEN_SECRET }}" >> ./sonar-project.properties
-
       - name: Install dependencies
         run: |
             # Update Homebrew
@@ -50,6 +46,10 @@ jobs:
 
             # Install Lizard
             brew install lizard
+
+      - name: Generate sonar-project.properties
+        run: |
+            echo "sonar.login=${{ env.SONAR_TOKEN_SECRET }}" >> sonar-project.properties
        
       - name: Install SonarQube Scanner
         run: |
