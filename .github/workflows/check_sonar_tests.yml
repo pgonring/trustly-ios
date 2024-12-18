@@ -82,7 +82,7 @@ jobs:
       - name: Run Sonar-Swift Script
         run: |
           chmod +x ./run-sonar-swift.sh
-          ./run-sonar-swift.sh
+          ./run-sonar-swift.sh -v
 
       - name: Verify Coverage Report
         run: |
