@@ -47,6 +47,16 @@ jobs:
         run: |
          brew install sonar-scanner
 
+      - name: Set up SonarQube Scanner
+        uses: sonarsource/sonar-scanner-action@v2
+        with:
+          sonar-project-key: ${{ secrets.SONAR_PROJECT_KEY }}
+         
+      - name: Run SonarQube Analysis
+        run: |
+          # Create sonar-project.properties or update it dynamically
+          echo "sonar.login=${{ secrets.SONAR_TOKEN_SECRET }}" >> sonar-project.properties
+
       - name: Run Sonar-Swift Script
         run: |
           chmod +x ./run-sonar-swift.sh
@@ -59,19 +69,3 @@ jobs:
           else
             echo "Coverage report not found!" && exit 1
           fi
-      - name: Run SonarQube Analysis
-        run: |
-          sonar-scanner -X \
-            -Dsonar.host.url=${SONAR_HOST_URL} \
-            -Dsonar.login=${SONAR_TOKEN} \
-            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-            -Dsonar.projectName=${SONAR_PROJECT_NAME} \
-            -Dsonar.pullrequest.base="${{ github.base_ref }}" \
-            -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
-            -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
-            -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
-            -Dsonar.coverageReportPaths=sonar-reports/generic-coverage.xml \
-            -Dsonar.scm.disabled=true \
-            -Dsonar.language=swift \
-            -Dsonar.sources="." \
-            -Dsonar.verbose=true
