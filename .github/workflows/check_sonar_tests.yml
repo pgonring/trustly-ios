@@ -44,7 +44,18 @@ jobs:
 
             # Install xcodebuild (part of Xcode Command Line Tools)
             xcode-select --install || echo "Xcode Command Line Tools already installed"
-  
+
+      - name: Clean Derived Data
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+
+      - name: Run Build and Tests
+        run: |
+          xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+            -scheme TrustlySDK-Example \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+            test -quiet | xcpretty
+
       - name: Run Sonar-Swift Script
         run: |
           chmod +x ./run-sonar-swift.sh
