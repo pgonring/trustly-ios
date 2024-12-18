@@ -28,7 +28,11 @@ jobs:
       - name: Install CocoaPods
         run: |
             gem install cocoapods
-            pod install --project-directory=Example    
+            pod install --project-directory=Example
+
+      - name: Generate sonar-project.properties
+        run: |
+          echo "sonar.login=${{ env.SONAR_TOKEN_SECRET }}" >> ./sonar-project.properties
 
       - name: Install dependencies
         run: |
@@ -46,10 +50,20 @@ jobs:
 
             # Install Lizard
             brew install lizard
-
-      - name: Devices list
+       
+      - name: Install SonarQube Scanner
         run: |
-         xcrun simctl list devices
+          SONAR_SCANNER_VERSION=5.0.1.3006
+          SONAR_SCANNER_DIR=/opt/sonar-scanner
+
+          curl -o sonar-scanner-cli.zip -L "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip"
+
+          sudo apt-get install -y unzip
+          unzip sonar-scanner-cli.zip
+          sudo mv sonar-scanner-${SONAR_SCANNER_VERSION}-linux ${SONAR_SCANNER_DIR}
+
+          echo "${SONAR_SCANNER_DIR}/bin" >> $GITHUB_PATH
+          echo "SonarScanner installed successfully!"     
 
       - name: Run Sonar-Swift Script
         run: |
@@ -63,20 +77,3 @@ jobs:
           else
             echo "Coverage report not found!" && exit 1
           fi
-
-      - name: Run SonarQube Analysis
-        run: |
-          sonar-scanner -X \
-            -Dsonar.host.url=${SONAR_HOST_URL} \
-            -Dsonar.login=${SONAR_TOKEN} \
-            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-            -Dsonar.projectName=${SONAR_PROJECT_NAME} \
-            -Dsonar.pullrequest.base="${{ github.base_ref }}" \
-            -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
-            -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
-            -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
-            -Dsonar.coverageReportPaths=sonar-reports/generic-coverage.xml \
-            -Dsonar.scm.disabled=true \
-            -Dsonar.language=swift \
-            -Dsonar.sources="." \
-            -Dsonar.verbose=true
