@@ -87,7 +87,6 @@ jobs:
             echo "Running xcodebuild..."
             xcodebuild clean build \
             -workspace Example/TrustlySDK.xcworkspace \
-            -scheme TrustlySDK \
             -destination-timeout 360 \
             COMPILER_INDEX_STORE_ENABLE=YES \
             -verbose || exit 65
