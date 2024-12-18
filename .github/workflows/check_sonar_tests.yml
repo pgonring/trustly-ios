@@ -79,6 +79,13 @@ jobs:
 
             echo "Xcode caches and temporary files cleared!"
 
+      - name: Run Xcode Build
+        run: |
+            xcodebuild -workspace Example/TrustlySDK.xcworkspace \
+            -scheme TrustlySDK-Example \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+            test || true
+
       - name: Run Sonar-Swift Script
         run: |
           chmod +x ./run-sonar-swift.sh
