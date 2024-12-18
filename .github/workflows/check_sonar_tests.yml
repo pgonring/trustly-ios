@@ -81,6 +81,10 @@ jobs:
 
       - name: Run Sonar-Swift Script
         run: |
+         xcrun simctl list
+
+      - name: Run Sonar-Swift Script
+        run: |
           chmod +x ./run-sonar-swift.sh
           ./run-sonar-swift.sh -v
 
