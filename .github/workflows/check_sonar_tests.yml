@@ -45,10 +45,23 @@ jobs:
             # Install xcodebuild (part of Xcode Command Line Tools)
             xcode-select --install || echo "Xcode Command Line Tools already installed"
 
-      - name: Clean Derived Data
+      - name: Clean Xcode Caches
         run: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-
+            # Remover caches do Xcode
+            rm -rf ~/Library/Caches/com.apple.dt.Xcode
+        
+            # Remover arquivos temporários do Xcode
+            rm -rf ~/Library/Developer/Xcode/DerivedData
+        
+            # Remover caches de compilação específicos
+            rm -rf ~/Library/Developer/Xcode/Archives
+            rm -rf ~/Library/Developer/Xcode/iOS\ Device\ Logs
+        
+            # Opcional: Remover preferências do Xcode
+            rm -rf ~/Library/Preferences/com.apple.dt.Xcode.plist
+        
+            echo "Xcode caches and temporary files cleared!"
+          
       - name: Run Build and Tests
         run: |
           xcodebuild -workspace Example/TrustlySDK.xcworkspace \
