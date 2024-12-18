@@ -42,24 +42,41 @@ jobs:
             # Install Lizard
             brew install lizard
 
-            # Install xcodebuild (part of Xcode Command Line Tools)
+            # Ensure xcodebuild is available (part of Xcode Command Line Tools)
             xcode-select --install || echo "Xcode Command Line Tools already installed"
+
+            # Install NVM (Node Version Manager)
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+            # Source nvm to make it available in the current session
+            source ~/.bash_profile || source ~/.zshrc
+
+            # Install a specific version of Node.js (example: v16)
+            nvm install 16
+            nvm use 16
+
+            # Optionally, you can set a default version
+            nvm alias default 16
+
+            # Verify Node and NVM installation
+            node -v
+            npm -v
 
       - name: Clean Xcode Caches
         run: |
-            # Remover caches do Xcode
+            # Remove Xcode caches
             rm -rf ~/Library/Caches/com.apple.dt.Xcode
-        
-            # Remover arquivos temporários do Xcode
+
+            # Remove Xcode derived data
             rm -rf ~/Library/Developer/Xcode/DerivedData
-        
-            # Remover caches de compilação específicos
+
+            # Remove Xcode build caches
             rm -rf ~/Library/Developer/Xcode/Archives
             rm -rf ~/Library/Developer/Xcode/iOS\ Device\ Logs
-        
-            # Opcional: Remover preferências do Xcode
+
+            # Optionally: Remove Xcode preferences
             rm -rf ~/Library/Preferences/com.apple.dt.Xcode.plist
-        
+
             echo "Xcode caches and temporary files cleared!"
 
       - name: Run Sonar-Swift Script
@@ -74,7 +91,6 @@ jobs:
           else
             echo "Coverage report not found!" && exit 1
           fi
-
 
       - name: Run SonarQube Analysis
         run: |
