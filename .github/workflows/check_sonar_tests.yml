@@ -30,7 +30,6 @@ jobs:
       - name: Get Git Revision (Commit SHA)
         id: git_revision
         run: |
-            cd trustly-ios || exit
             git fetch origin "${BRANCH_ORIGIN}"
             GIT_REVISION=$(git rev-parse origin/${BRANCH_ORIGIN})
             echo "Git Revision: $GIT_REVISION"      
