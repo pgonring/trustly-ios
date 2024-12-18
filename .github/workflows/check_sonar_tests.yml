@@ -88,7 +88,6 @@ jobs:
             xcodebuild clean build \
             -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK-Example \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
             -destination-timeout 360 \
             COMPILER_INDEX_STORE_ENABLE=NO \
             -verbose || exit 65
