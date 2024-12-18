@@ -89,7 +89,7 @@ jobs:
             -workspace Example/TrustlySDK.xcworkspace \
             -scheme TrustlySDK_Example \
             -destination-timeout 360 \
-            COMPILER_INDEX_STORE_ENABLE=NO \
+            COMPILER_INDEX_STORE_ENABLE=YES \
             -verbose || exit 65
 
             echo "Build completed successfully!"    
