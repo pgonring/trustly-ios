@@ -81,7 +81,7 @@ jobs:
 
       - name: Run Sonar-Swift Script
         run: |
-         xcrun simctl list
+         xcrun simctl list devices
 
       - name: Run Sonar-Swift Script
         run: |
