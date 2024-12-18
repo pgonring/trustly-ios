@@ -51,6 +51,10 @@ jobs:
         run: |
          brew install sonar-scanner
 
+      - name: Generate sonar-project.properties
+        run: |
+           echo "sonar.login=${SONAR_TOKEN}" >> sonar-project.properties
+
 
       - name: Run Sonar-Swift Script
         run: |
