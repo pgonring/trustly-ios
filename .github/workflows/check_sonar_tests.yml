@@ -1,0 +1,67 @@
+name: CI - iOS
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  workflow_dispatch:
+
+env:
+  GH_TOKEN: ${{ secrets.GIT_TOKEN_SECRET }}
+  OWNER: ${{ github.repository_owner }}
+  REPO: ${{ github.event.repository.name }}
+  PR_NUMBER: ${{ github.event.number }}
+  SONAR_HOST_URL: "https://sonarqube.trustly.one"
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
+  SONAR_PROJECT_KEY: "trustly-ios"
+  SONAR_PROJECT_NAME: "trustly-ios"
+
+jobs:
+  SonarQube:
+    runs-on: macOS-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          # Install required tools
+          brew update
+          brew install cocoapods swiftlint oclint
+          sudo gem install -n /usr/local/bin xcpretty
+
+          # Install project dependencies
+          pod install --project-directory=Example
+
+      - name: Run Sonar-Swift Script
+        run: |
+          chmod +x ./run-sonar-swift.sh
+          ./run-sonar-swift.sh
+
+      - name: Verify Coverage Report
+        run: |
+          if [ -f "sonar-reports/generic-coverage.xml" ]; then
+            echo "Coverage report generated successfully: sonar-reports/generic-coverage.xml"
+          else
+            echo "Coverage report not found!" && exit 1
+          fi
+
+
+      - name: Run SonarQube Analysis
+        run: |
+          sonar-scanner -X \
+            -Dsonar.host.url=${SONAR_HOST_URL} \
+            -Dsonar.login=${SONAR_TOKEN} \
+            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+            -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+            -Dsonar.pullrequest.base="${{ github.base_ref }}" \
+            -Dsonar.pullrequest.branch="${{ github.head_ref }}" \
+            -Dsonar.pullrequest.key="${{ github.event.pull_request.number }}" \
+            -Dsonar.scm.revision="${{ github.event.pull_request.head.sha }}" \
+            -Dsonar.coverageReportPaths=sonar-reports/generic-coverage.xml \
+            -Dsonar.scm.disabled=true \
+            -Dsonar.language=swift \
+            -Dsonar.sources="." \
+            -Dsonar.verbose=true
