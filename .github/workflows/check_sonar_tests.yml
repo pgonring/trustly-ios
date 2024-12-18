@@ -25,6 +25,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install CocoaPods
+        run: |
+            gem install cocoapods
+            pod install --project-directory=Example    
+
       - name: Install dependencies
         run: |
             # Update Homebrew
@@ -42,44 +47,7 @@ jobs:
             # Install Lizard
             brew install lizard
 
-            # Ensure xcodebuild is available (part of Xcode Command Line Tools)
-            xcode-select --install || echo "Xcode Command Line Tools already installed"
-
-            # Install NVM (Node Version Manager)
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-
-            # Source nvm to make it available in the current session
-            source ~/.bash_profile || source ~/.zshrc
-
-            # Install a specific version of Node.js (example: v16)
-            nvm install 16
-            nvm use 16
-
-            # Optionally, you can set a default version
-            nvm alias default 16
-
-            # Verify Node and NVM installation
-            node -v
-            npm -v
-
-      - name: Clean Xcode Caches
-        run: |
-            # Remove Xcode caches
-            rm -rf ~/Library/Caches/com.apple.dt.Xcode
-
-            # Remove Xcode derived data
-            rm -rf ~/Library/Developer/Xcode/DerivedData
-
-            # Remove Xcode build caches
-            rm -rf ~/Library/Developer/Xcode/Archives
-            rm -rf ~/Library/Developer/Xcode/iOS\ Device\ Logs
-
-            # Optionally: Remove Xcode preferences
-            rm -rf ~/Library/Preferences/com.apple.dt.Xcode.plist
-
-            echo "Xcode caches and temporary files cleared!" 
-
-      - name: Run Sonar-Swift Script
+      - name: Devices list
         run: |
          xcrun simctl list devices
 
