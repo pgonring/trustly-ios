@@ -25,11 +25,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install CocoaPods
-        run: |
-            gem install cocoapods
-            pod install --project-directory=Example
-
       - name: Install dependencies
         run: |
             # Update Homebrew
@@ -43,18 +38,14 @@ jobs:
             # Install Lizard
             brew install lizard
 
-      - name: Devices list
+      - name: Install CocoaPods
         run: |
-         xcrun simctl list devices
+            gem install cocoapods
+            pod install --project-directory=Example
 
       - name: Install sonnar-scanner
         run: |
          brew install sonar-scanner
-
-      - name: Generate sonar-project.properties
-        run: |
-           echo "sonar.login=${SONAR_TOKEN}" >> sonar-project.properties
-
 
       - name: Run Sonar-Swift Script
         run: |
