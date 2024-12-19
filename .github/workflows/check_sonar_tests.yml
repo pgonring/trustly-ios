@@ -75,6 +75,7 @@ jobs:
         run: |
           if [ -f "sonar-reports/generic-coverage.xml" ]; then
             echo "Coverage report generated successfully: sonar-reports/generic-coverage.xml"
+            cat sonar-reports/generic-coverage.xml
           else
             echo "Coverage report not found!" && exit 1
           fi
