@@ -1,4 +1,4 @@
-name: CI - iOS
+name: CI - iOS Quality Check
 
 on:
   pull_request:
@@ -6,14 +6,11 @@ on:
   workflow_dispatch:
 
 env:
-  GH_TOKEN: ${{ secrets.GIT_TOKEN_SECRET }}
-  OWNER: ${{ github.repository_owner }}
-  REPO: ${{ github.event.repository.name }}
   PR_NUMBER: ${{ github.event.number }}
   BRANCH_ORIGIN: ${{ github.head_ref }}
   BASE_BRANCH: ${{ github.base_ref }}
-  SONAR_HOST_URL: "https://sonarqube.trustly.one"
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_SECRET }}
+  SONAR_HOST_URL: "https://sonarqube.trustly.one"
   SONAR_PROJECT_KEY: "trustly-ios"
   SONAR_PROJECT_NAME: "trustly-ios"
 
@@ -61,7 +58,7 @@ jobs:
         run: |
           # Create sonar-project.properties or update it dynamically
           echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
-          echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}}" >> sonar-project.properties
+          echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}" >> sonar-project.properties
           echo "sonar.projectName=${{ env.SONAR_PROJECT_NAME }}" >> sonar-project.properties
           echo "sonar.login=${{ secrets.SONAR_TOKEN_SECRET }}" >> sonar-project.properties
           echo "sonar.pullrequest.key=${{ github.event.number }}" >> sonar-project.properties
