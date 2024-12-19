@@ -60,7 +60,7 @@ jobs:
       - name: Run SonarQube Analysis
         run: |
           # Create sonar-project.properties or update it dynamically
-          echo "sonar.host.url=${{ env.SONAR_HOST_URL }} >> sonar-project.properties
+          echo "sonar.host.url=${{ env.SONAR_HOST_URL }}" >> sonar-project.properties
           echo "sonar.projectKey=${{ env.SONAR_PROJECT_KEY }}}" >> sonar-project.properties
           echo "sonar.projectName=${{ env.SONAR_PROJECT_NAME }}" >> sonar-project.properties
           echo "sonar.login=${{ secrets.SONAR_TOKEN_SECRET }}" >> sonar-project.properties
