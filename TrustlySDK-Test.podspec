@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'TrustlySDK'
+  s.name             = 'TrustlySDK-Test'
 
   s.version          = '3.3.0'
 
